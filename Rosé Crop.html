@@ -1,0 +1,313 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Rosé Crop</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600&family=Archivo+Black&family=Allura&display=swap">
+<style>
+/* Layout: sticky header, short hero, filter chips, 2-column product grid (4 on desktop), bottom sheets for product detail and "Ma demande" (cart -> WhatsApp). */
+:root {
+  --bg: #FFF4F5;
+  --surface: #FFFFFF;
+  --fg: #3A0A1A;
+  --muted: #7A4A58;
+  --line: #F0CDD3;
+  --accent: #C72F5C;
+  --accent-fg: #FFFFFF;
+  --deep: #800021;
+  --tile: #F9DADD;
+  --overlay: rgba(58, 10, 26, 0.45);
+  --ban-bg: #EBEBEC; --ban-band: #FFFFFF; --ban-new: #F99BBE; --ban-script: #3A3A42;
+  --font-display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #2A0812; --surface: #3A0E1C; --fg: #FBE3E7; --muted: #D9A5B1; --line: #5A1F32;
+    --accent: #F07C9C; --accent-fg: #2A0812; --deep: #F9DADD; --tile: #4A1428; --overlay: rgba(0, 0, 0, 0.6);
+    --ban-bg: #2A0812; --ban-band: #3F1022; --ban-new: #EE8299; --ban-script: #FBE3E7;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #2A0812; --surface: #3A0E1C; --fg: #FBE3E7; --muted: #D9A5B1; --line: #5A1F32;
+  --accent: #F07C9C; --accent-fg: #2A0812; --deep: #F9DADD; --tile: #4A1428; --overlay: rgba(0, 0, 0, 0.6);
+  --ban-bg: #2A0812; --ban-band: #3F1022; --ban-new: #EE8299; --ban-script: #FBE3E7;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 48px;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.wrap { max-width: 1040px; margin: 0 auto; }
+
+/* Header */
+.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: var(--bg); border-bottom: 1px solid var(--line);
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 12px max(16px, env(safe-area-inset-right, 0px)) 12px max(16px, env(safe-area-inset-left, 0px));
+}
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.logo { font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; letter-spacing: -0.02em; color: var(--deep); }
+.logo span { color: var(--accent); }
+.cart-btn {
+  display: inline-flex; align-items: center; gap: 8px; border: 0; border-radius: 999px;
+  background: var(--accent); color: var(--accent-fg); padding: 10px 16px; font-weight: 600;
+}
+.cart-btn .count { background: var(--accent-fg); color: var(--accent); border-radius: 999px; min-width: 22px; height: 22px; display: inline-grid; place-items: center; font-size: 0.8rem; padding: 0 6px; }
+
+/* Banner */
+.banner { position: relative; margin-top: 16px; border-radius: 24px; overflow: hidden; background: var(--ban-bg); aspect-ratio: 16 / 9; min-height: 190px; display: grid; place-items: center; text-align: center; }
+.bands { position: absolute; inset: 0; background: linear-gradient(115deg, transparent 0 14%, var(--ban-band) 14% 40%, transparent 40% 47%, var(--ban-band) 47% 72%, transparent 72%); opacity: 0.9; }
+.banner-text { position: relative; display: grid; justify-items: center; padding: 0 12px; }
+.banner .new { font-family: "Archivo Black", Impact, "Arial Black", sans-serif; font-size: clamp(3.6rem, 19vw, 9.5rem); line-height: 0.95; letter-spacing: -0.01em; color: var(--ban-new); text-shadow: 0 6px 14px rgba(0, 0, 0, 0.12); }
+.banner .script { font-family: Allura, "Brush Script MT", cursive; font-size: clamp(2.6rem, 12vw, 6rem); line-height: 1; color: var(--ban-script); margin-top: -0.38em; transform: rotate(-2deg); }
+
+/* Hero */
+.hero { padding: 28px 0 20px; }
+.hero h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(2.2rem, 8vw, 4rem); line-height: 1.02; letter-spacing: -0.03em; margin: 0 0 12px; color: var(--deep); text-wrap: balance; max-width: 14ch; }
+.hero p { margin: 0; max-width: 46ch; color: var(--muted); font-size: 1.05rem; }
+.how { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 18px; font-size: 0.9rem; color: var(--muted); }
+.how b { color: var(--accent); font-weight: 600; }
+
+/* Filters */
+.filters { display: flex; gap: 8px; overflow-x: auto; padding: 8px 0 16px; scrollbar-width: none; }
+.chip { flex: none; border: 1.5px solid var(--line); background: var(--surface); border-radius: 999px; padding: 8px 16px; font-weight: 500; }
+.chip[aria-pressed="true"] { background: var(--deep); border-color: var(--deep); color: var(--bg); }
+
+/* Grid */
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 12px; }
+@media (min-width: 720px) { .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px 16px; } }
+.card { display: flex; flex-direction: column; gap: 8px; text-align: left; background: none; border: 0; padding: 0; min-width: 0; }
+.tile { aspect-ratio: 4 / 5; border-radius: 20px; background: var(--tile); display: grid; place-items: center; position: relative; overflow: hidden; max-width: 100%; }
+.tile svg { width: 62%; height: auto; }
+.tile .tag { position: absolute; left: 10px; bottom: 10px; font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.card h3 { margin: 0; font-size: 0.98rem; font-weight: 600; }
+.card .price { color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; }
+.card .more { font-size: 0.85rem; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+.card:hover .tile { outline: 2px solid var(--accent); }
+
+.note { margin-top: 36px; padding: 16px 18px; border-radius: 16px; background: var(--tile); color: var(--fg); font-size: 0.92rem; }
+footer { margin-top: 32px; color: var(--muted); font-size: 0.88rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
+
+/* Sheets */
+.overlay { position: fixed; inset: 0; background: var(--overlay); z-index: 20; display: flex; align-items: flex-end; justify-content: center; }
+.sheet {
+  background: var(--surface); width: 100%; max-width: 520px; max-height: 92%; overflow-y: auto;
+  border-radius: 24px 24px 0 0; padding: 20px max(20px, env(safe-area-inset-right, 0px)) calc(20px + env(safe-area-inset-bottom, 0px)) max(20px, env(safe-area-inset-left, 0px));
+}
+@media (min-width: 720px) { .overlay { align-items: center; } .sheet { border-radius: 24px; } }
+.sheet-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.sheet h2 { font-family: var(--font-display); font-weight: 700; font-size: 1.4rem; margin: 0; line-height: 1.15; }
+.x { border: 0; background: var(--tile); border-radius: 999px; width: 36px; height: 36px; font-size: 1.2rem; flex: none; }
+.sheet .tile { margin: 16px 0; aspect-ratio: 16 / 10; }
+.sheet .tile svg { width: 34%; }
+.label { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 16px 0 8px; }
+.opts { display: flex; flex-wrap: wrap; gap: 8px; }
+.opt { border: 1.5px solid var(--line); background: var(--surface); border-radius: 12px; padding: 8px 14px; min-width: 48px; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; }
+.opt[aria-pressed="true"] { border-color: var(--accent); background: var(--tile); }
+.dot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.2); }
+.btn { width: 100%; margin-top: 20px; border: 0; border-radius: 14px; padding: 14px 18px; background: var(--accent); color: var(--accent-fg); font-weight: 600; font-size: 1rem; text-align: center; text-decoration: none; display: block; }
+.btn.wa { background: #1F8F4D; color: #fff; }
+.btn[aria-disabled="true"] { opacity: 0.45; pointer-events: none; }
+.desc { color: var(--muted); margin: 8px 0 0; }
+
+/* Cart lines */
+.lines { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 12px; }
+.line { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.line b { font-weight: 600; }
+.line small { color: var(--muted); }
+.qty { display: inline-flex; align-items: center; gap: 10px; }
+.qty button { width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid var(--line); background: var(--surface); }
+.qty .rm { width: auto; border-radius: 8px; padding: 0 10px; border: 0; text-decoration: underline; color: var(--muted); background: none; }
+.total { display: flex; justify-content: space-between; font-weight: 700; margin-top: 14px; font-variant-numeric: tabular-nums; }
+.field { display: grid; gap: 4px; margin-top: 12px; }
+.field label { font-size: 0.85rem; color: var(--muted); }
+.field input { font: inherit; padding: 11px 12px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--bg); color: var(--fg); }
+.empty { text-align: center; color: var(--muted); padding: 28px 0 8px; }
+.fine { font-size: 0.82rem; color: var(--muted); margin: 12px 0 0; text-align: center; }
+</style>
+
+<div class="top"><div class="wrap">
+  <div class="logo">Rosé<span>Crop</span></div>
+  <button class="cart-btn" id="openCart" type="button">Ma demande <span class="count" id="count">0</span></button>
+</div></div>
+
+<main class="wrap">
+  <div class="banner" role="img" aria-label="Nouvelle collection">
+    <div class="bands"></div>
+    <div class="banner-text"><span class="new">NEW</span><span class="script">Collection</span></div>
+  </div>
+  <section class="hero">
+    <h1>Des crop tops pour toi.</h1>
+    <p>Choisis tes pièces, ajoute-les à ta demande et envoie-la sur WhatsApp. Pas de paiement sur le site.</p>
+    <div class="how"><span><b>1.</b> Choisis</span><span><b>2.</b> Envoie ta demande</span><span><b>3.</b> On confirme sur WhatsApp</span></div>
+  </section>
+
+  <div class="filters" id="filters" role="group" aria-label="Catégories"></div>
+  <section class="grid" id="grid" aria-live="polite"></section>
+
+  <p class="note">Le paiement et la livraison se règlent directement avec nous sur WhatsApp, après confirmation de ta demande.</p>
+  <footer><span>© 2026 Rosé Crop</span><span>Commandes uniquement par WhatsApp</span></footer>
+</main>
+
+<div class="overlay" id="productOv" hidden><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="pTitle" id="productSheet"></div></div>
+<div class="overlay" id="cartOv" hidden><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="cTitle" id="cartSheet"></div></div>
+
+<script>
+/* ===== À modifier par la propriétaire ===== */
+var WHATSAPP_NUMBER = "233000000000"; // numéro avec indicatif, sans + ni espaces
+var CURRENCY = "FCFA";
+/* Un produit = un bloc { ... }. À remplir pour chacun :
+   name = nom, cat = catégorie, price = prix (chiffres seulement), desc = petite description,
+   sizes = tailles proposées, colors = couleurs [nom, code couleur], img = photo (laisser "" s'il n'y en a pas). */
+function tileInner(p, color) {
+  if (p.img) return '<img src="' + p.img + '" alt="' + p.name + '" style="width:100%;height:100%;object-fit:cover">';
+  return shirt(color) + '<span class="tag">Photo à ajouter</span>';
+}
+var PRODUCTS = [
+  { id: "p1", img: "", name: "Crop top côtelé", cat: "Basiques", price: 5000, desc: "Maille côtelée souple, coupe ajustée.", sizes: ["S","M","L"], colors: [["Rose","#D23A66"],["Blanc","#FFFFFF"],["Bordeaux","#800021"]] },
+  { id: "p2", name: "Crop top manches longues", cat: "Manches longues", price: 7000, desc: "Manches longues, col rond, tissu doux.", sizes: ["S","M","L","XL"], colors: [["Bordeaux","#881144"],["Rose clair","#EE8299"]] },
+  { id: "p3", name: "Crop top dos nu", cat: "Dos nu", price: 6500, desc: "Attache nouée dans le cou, dos ouvert.", sizes: ["XS","S","M"], colors: [["Rose","#D23A66"],["Noir","#222222"]] },
+  { id: "p4", name: "Crop top à bretelles", cat: "Basiques", price: 4500, desc: "Fines bretelles réglables.", sizes: ["S","M","L"], colors: [["Rose clair","#EE8299"],["Blanc","#FFFFFF"]] },
+  { id: "p5", name: "Ensemble crop + jupe", cat: "Ensembles", price: 12000, desc: "Crop top et jupe assortis, vendus ensemble.", sizes: ["S","M","L"], colors: [["Bordeaux","#800021"],["Rose","#D23A66"]] },
+  { id: "p6", name: "Crop top noué", cat: "Basiques", price: 5500, desc: "Nœud devant, tissu léger.", sizes: ["S","M","L","XL"], colors: [["Rose","#D23A66"],["Rose clair","#EE8299"],["Blanc","#FFFFFF"]] },
+  { id: "p7", name: "Crop top satiné", cat: "Dos nu", price: 8000, desc: "Satin brillant, dos croisé.", sizes: ["S","M"], colors: [["Bordeaux","#881144"],["Rose","#D23A66"]] },
+  { id: "p8", name: "Ensemble crop + pantalon", cat: "Ensembles", price: 14000, desc: "Crop top et pantalon fluide assortis.", sizes: ["S","M","L"], colors: [["Rose clair","#EE8299"],["Bordeaux","#800021"]] }
+];
+/* ========================================== */
+
+var cart = [];
+var activeCat = "Tous";
+var $ = function (id) { return document.getElementById(id); };
+function money(n) { return n.toLocaleString("fr-FR") + " " + CURRENCY; }
+function shirt(color) {
+  return '<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M30 18 L41 18 Q50 34 59 18 L70 18 L90 42 L77 53 L68 46 L68 72 Q50 78 32 72 L32 46 L23 53 L10 42 Z" fill="' + color + '" stroke="rgba(0,0,0,0.18)" stroke-width="1.5" stroke-linejoin="round"/></svg>';
+}
+function byId(id) { for (var i = 0; i < PRODUCTS.length; i++) if (PRODUCTS[i].id === id) return PRODUCTS[i]; return null; }
+
+function renderFilters() {
+  var cats = ["Tous"];
+  PRODUCTS.forEach(function (p) { if (cats.indexOf(p.cat) < 0) cats.push(p.cat); });
+  $("filters").innerHTML = cats.map(function (c) {
+    return '<button class="chip" type="button" data-cat="' + c + '" aria-pressed="' + (c === activeCat) + '">' + c + '</button>';
+  }).join("");
+}
+function renderGrid() {
+  var list = PRODUCTS.filter(function (p) { return activeCat === "Tous" || p.cat === activeCat; });
+  $("grid").innerHTML = list.map(function (p) {
+    return '<button class="card" type="button" data-id="' + p.id + '"><div class="tile">' + tileInner(p, p.colors[0][1]) + '</div><h3>' + p.name + '</h3><span class="price">' + money(p.price) + '</span><span class="more">Détail</span></button>';
+  }).join("");
+}
+
+var sel = { size: null, color: null };
+function openProduct(id) {
+  var p = byId(id); if (!p) return;
+  sel = { size: p.sizes[0], color: p.colors[0] };
+  drawProduct(p);
+  $("productOv").hidden = false;
+  $("productSheet").querySelector(".x").focus();
+}
+function drawProduct(p) {
+  var sizes = p.sizes.map(function (s) { return '<button class="opt" type="button" data-size="' + s + '" aria-pressed="' + (s === sel.size) + '">' + s + '</button>'; }).join("");
+  var colors = p.colors.map(function (c) { return '<button class="opt" type="button" data-color="' + c[0] + '" aria-pressed="' + (c[0] === sel.color[0]) + '"><span class="dot" style="background:' + c[1] + '"></span>' + c[0] + '</button>'; }).join("");
+  $("productSheet").innerHTML =
+    '<div class="sheet-head"><h2 id="pTitle">' + p.name + '</h2><button class="x" type="button" data-close="product" aria-label="Fermer">×</button></div>' +
+    '<div class="tile">' + (p.img ? tileInner(p, sel.color[1]) : shirt(sel.color[1])) + '</div>' +
+    '<div class="price" style="font-weight:700;font-size:1.2rem;color:var(--accent)">' + money(p.price) + '</div>' +
+    '<p class="desc">' + p.desc + '</p>' +
+    '<div class="label">Taille</div><div class="opts">' + sizes + '</div>' +
+    '<div class="label">Couleur</div><div class="opts">' + colors + '</div>' +
+    '<button class="btn" type="button" data-add="' + p.id + '">Ajouter à ma demande</button>';
+  var f = document.activeElement; // keep focus on selected option after redraw
+}
+
+function addToCart(id) {
+  var p = byId(id);
+  var key = id + "|" + sel.size + "|" + sel.color[0];
+  var found = null;
+  cart.forEach(function (l) { if (l.key === key) found = l; });
+  if (found) found.qty += 1; else cart.push({ key: key, id: id, size: sel.size, color: sel.color[0], qty: 1 });
+  $("productOv").hidden = true;
+  updateCount();
+  openCart();
+}
+function updateCount() {
+  var n = 0; cart.forEach(function (l) { n += l.qty; });
+  $("count").textContent = n;
+}
+function total() { var t = 0; cart.forEach(function (l) { t += byId(l.id).price * l.qty; }); return t; }
+function message(name, place) {
+  var lines = ["Bonjour ! Je voudrais commander :"];
+  cart.forEach(function (l) {
+    var p = byId(l.id);
+    lines.push("- " + l.qty + " x " + p.name + " (" + l.size + ", " + l.color + ") : " + money(p.price * l.qty));
+  });
+  lines.push("Total estimé : " + money(total()));
+  if (name) lines.push("Nom : " + name);
+  if (place) lines.push("Ville / quartier : " + place);
+  return lines.join("\n");
+}
+function waLink() {
+  var name = $("custName") ? $("custName").value.trim() : "";
+  var place = $("custPlace") ? $("custPlace").value.trim() : "";
+  return "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message(name, place));
+}
+function openCart() { drawCart(); $("cartOv").hidden = false; $("cartSheet").querySelector(".x").focus(); }
+function drawCart() {
+  var keepName = $("custName") ? $("custName").value : "";
+  var keepPlace = $("custPlace") ? $("custPlace").value : "";
+  var head = '<div class="sheet-head"><h2 id="cTitle">Ma demande</h2><button class="x" type="button" data-close="cart" aria-label="Fermer">×</button></div>';
+  if (!cart.length) {
+    $("cartSheet").innerHTML = head + '<p class="empty">Ta demande est vide. Choisis un crop top pour commencer.</p><button class="btn" type="button" data-close="cart">Voir le catalogue</button>';
+    return;
+  }
+  var items = cart.map(function (l, i) {
+    var p = byId(l.id);
+    return '<li class="line"><div><b>' + p.name + '</b><br><small>' + l.size + ' · ' + l.color + '</small></div><div style="text-align:right;font-variant-numeric:tabular-nums">' + money(p.price * l.qty) + '</div>' +
+      '<div class="qty"><button type="button" data-dec="' + i + '" aria-label="Moins">−</button><span>' + l.qty + '</span><button type="button" data-inc="' + i + '" aria-label="Plus">+</button></div>' +
+      '<div style="text-align:right"><button class="qty rm" type="button" data-rm="' + i + '" style="border:0;background:none;text-decoration:underline;color:var(--muted)">Retirer</button></div></li>';
+  }).join("");
+  $("cartSheet").innerHTML = head + '<ul class="lines">' + items + '</ul>' +
+    '<div class="total"><span>Total estimé</span><span>' + money(total()) + '</span></div>' +
+    '<div class="field"><label for="custName">Ton prénom (facultatif)</label><input id="custName" type="text" autocomplete="given-name"></div>' +
+    '<div class="field"><label for="custPlace">Ville ou quartier (facultatif)</label><input id="custPlace" type="text"></div>' +
+    '<a class="btn wa" id="waBtn" href="' + waLink() + '" target="_blank" rel="noopener">Envoyer sur WhatsApp</a>' +
+    '<p class="fine">Le paiement se fait plus tard, avec nous, sur WhatsApp.</p>';
+  $("custName").value = keepName; $("custPlace").value = keepPlace;
+  $("waBtn").href = waLink();
+}
+
+document.addEventListener("click", function (e) {
+  var t = e.target.closest("button, .overlay"); if (!t) return;
+  if (t.classList.contains("overlay") && e.target === t) { t.hidden = true; return; }
+  if (t.dataset.cat) { activeCat = t.dataset.cat; renderFilters(); renderGrid(); return; }
+  if (t.classList.contains("card")) { openProduct(t.dataset.id); return; }
+  if (t.dataset.size) { sel.size = t.dataset.size; drawProduct(byId(t.closest(".sheet").querySelector("[data-add]").dataset.add)); return; }
+  if (t.dataset.color) { var p = byId(t.closest(".sheet").querySelector("[data-add]").dataset.add); p.colors.forEach(function (c) { if (c[0] === t.dataset.color) sel.color = c; }); drawProduct(p); return; }
+  if (t.dataset.add) { addToCart(t.dataset.add); return; }
+  if (t.dataset.close === "product") { $("productOv").hidden = true; return; }
+  if (t.dataset.close === "cart") { $("cartOv").hidden = true; return; }
+  if (t.id === "openCart") { openCart(); return; }
+  if (t.dataset.inc) { cart[+t.dataset.inc].qty += 1; updateCount(); drawCart(); return; }
+  if (t.dataset.dec) { var l = cart[+t.dataset.dec]; l.qty -= 1; if (l.qty < 1) cart.splice(+t.dataset.dec, 1); updateCount(); drawCart(); return; }
+  if (t.dataset.rm) { cart.splice(+t.dataset.rm, 1); updateCount(); drawCart(); return; }
+});
+document.addEventListener("input", function (e) {
+  if (e.target.id === "custName" || e.target.id === "custPlace") $("waBtn").href = waLink();
+});
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape") { $("productOv").hidden = true; $("cartOv").hidden = true; }
+});
+
+renderFilters(); renderGrid(); updateCount();
+</script>
+
+</body></html>
